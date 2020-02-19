@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<title>PAI SnakeGame</title>
+		<style type="text/css" media="screen">
+			/* Prevent page bouncing on iOS devices when touch-scrolling */
+			body { overflow: hidden; }
+
+			/* Just a little beautifying */
+			h1, p {
+				font-family: "Helvetica Neue", helvetica, arial, sans-serif;
+				text-align: center;
+			}
+
+			/* GitHub Button */
+			.github-corner:hover .octo-arm {
+	            animation: octocat-wave 560ms ease-in-out
+	        }
+	        @keyframes octocat-wave {
+	            0%,100% {transform:rotate(0)}
+	            20%,60% {transform:rotate(-25deg)}
+	            40%,80% {transform:rotate(10deg)}
+	        }
+	        @media (max-width:500px) {
+	            .github-corner:hover .octo-arm {
+	                animation:none
+	            }
+	            .github-corner .octo-arm {
+	                animation:octocat-wave 560ms ease-in-out
+	            }
+	        }
+		</style>
+	</head>
+
+	<body>
+		<div id="Welcome_message">
+			<h1>PAI SnakeGame</h1>
+			<p>play with <strong>← ↑ ↓ →</strong> on your keyboard, or with <strong>touch-swipe</strong> on mobile devices</p>
+		</div>
+		<!-- Add Snakelet -->
+		<script src="snake.js"></script>
+	</body>
+</html>
