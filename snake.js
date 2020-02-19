@@ -9,7 +9,7 @@ var snake = {
 	speedup: 1.05, // Speed increase after munching a Block; higher number = more speed gain
 	snake_color: "#33c33c", // Snake color
 	target_color: "#c333c3", // Blocks color
-	body_bg: "#eeeeee", // Main background color
+	body_bg: "#ffffff", // Main background color
 	fail_bg: "#990000", // Background color on collision (game fail)
 
 
@@ -195,29 +195,19 @@ var snake = {
         }
 	},
 
-	_touch_start: null,
-
-	touch_start: function (event) {
-		var touches = event.changedTouches;
-		snake._touch_start = [touches[0].pageX, touches[0].pageY];
-	},
-
-	touch_end: function (event) {
-		var touches = event.changedTouches;
-		var end_pos = [touches[0].pageX, touches[0].pageY];
-		var dX = end_pos[0] - snake._touch_start[0],
-			dY = end_pos[1] - snake._touch_start[1],
-			c = Math.sqrt(dX*dX + dY*dY),
-			alpha = Math.acos(dX/c);
-
-		if (alpha < Math.PI * 1/4) {
-			snake.state.direction = [1, 0];
-		} else if (alpha > Math.PI * 3/4) {
-			snake.state.direction = [-1, 0];
-		} else if (dY > 0) {
-			snake.state.direction = [0, 1];
-		} else {
-			snake.state.direction = [0, -1];
+	testFunc: function(el, dir) {
+		if (dir === 'up') {
+			// down
+			snake.state.direction = (snake.state.direction[1] != -1) ? [0, 1] : snake.state.direction;
+		} else if (dir === 'down') {
+			// up
+			snake.state.direction = (snake.state.direction[1] != 1) ? [0, -1] : snake.state.direction;
+		} else if (dir === 'left') {
+			// left
+			snake.state.direction = (snake.state.direction[0] != 1) ? [-1, 0] : snake.state.direction;
+		} else if (dir === 'right') {
+			// right
+			snake.state.direction = (snake.state.direction[0] != -1) ? [1, 0] : snake.state.direction;
 		}
 	},
 
@@ -232,6 +222,54 @@ var snake = {
 		document.body.addEventListener("touchend", snake.touch_end, false);
 
 		window.setTimeout(snake.iterate, 500);
+
+		detectSwipe("body", snake.testFunc);
 	}
 };
 window.onload = snake.init();
+
+function detectSwipe(id, func, deltaMin = 90) {
+  const swipe_det = {
+    sX: 0,
+    sY: 0,
+    eX: 0,
+    eY: 0
+  }
+  // Directions enumeration
+  const directions = Object.freeze({
+    UP: 'up',
+    DOWN: 'down',
+    RIGHT: 'right',
+    LEFT: 'left'
+  })
+  let direction = null
+  const el = document.getElementById(id)
+  el.addEventListener('touchstart', function(e) {
+    const t = e.touches[0]
+    swipe_det.sX = t.screenX
+    swipe_det.sY = t.screenY
+  }, false)
+  el.addEventListener('touchmove', function(e) {
+    // Prevent default will stop user from scrolling, use with care
+    // e.preventDefault();
+    const t = e.touches[0]
+    swipe_det.eX = t.screenX
+    swipe_det.eY = t.screenY
+  }, false)
+  el.addEventListener('touchend', function(e) {
+    const deltaX = swipe_det.eX - swipe_det.sX
+    const deltaY = swipe_det.eY - swipe_det.sY
+    // Min swipe distance, you could use absolute value rather
+    // than square. It just felt better for personnal use
+    if (deltaX ** 2 + deltaY ** 2 < deltaMin ** 2) return
+    // horizontal
+    if (deltaY === 0 || Math.abs(deltaX / deltaY) > 1)
+      direction = deltaX > 0 ? directions.RIGHT : directions.LEFT
+    else // vertical
+      direction = deltaY > 0 ? directions.UP : directions.DOWN
+
+    if (direction && typeof func === 'function') func(el, direction)
+
+    direction = null
+  }, false)
+}

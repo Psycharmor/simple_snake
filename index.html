@@ -5,7 +5,14 @@
 		<title>PAI SnakeGame</title>
 		<style type="text/css" media="screen">
 			/* Prevent page bouncing on iOS devices when touch-scrolling */
-			body { overflow: hidden; }
+			body {
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				overflow: hidden;
+			}
 
 			/* Just a little beautifying */
 			h1, p {
@@ -46,15 +53,15 @@
 		</style>
 	</head>
 
-	<body>
+	<body id="body">
 		<div id="Welcome_message">
 			<h1>PAI SnakeGame</h1>
 			<p>play with <strong>← ↑ ↓ →</strong> on your keyboard, or with <strong>touch-swipe</strong> on mobile devices</p>
 		</div>
-		<!-- Add Snakelet -->
-		<script src="snake.js"></script>
 		<div id="score-count" class="hide-message">
 			<p>Score: </p>
 		</div>
+		<!-- Add Snakelet -->
+		<script src="snake.js"></script>
 	</body>
 </html>
