@@ -5,8 +5,8 @@ var snake = {
 	_el_target: null,
 	_el_segments: [],
 	size: 10, // Size in pixel of Snake & Block
-	speed: 200, // Speed of Snake in miliseconds; higher number = slower
-	speedup: 1.1, // Speed increase after munching a Block; higher number = more speed gain
+	speed: 300, // Speed of Snake in miliseconds; higher number = slower
+	speedup: 1.05, // Speed increase after munching a Block; higher number = more speed gain
 	snake_color: "#33c33c", // Snake color
 	target_color: "#c333c3", // Blocks color
 	body_bg: "#eeeeee", // Main background color
@@ -100,11 +100,7 @@ var snake = {
 
 	lose: function () {
 		window.setTimeout(snake._bg_red, 0);
-		window.setTimeout(snake._bg_white, 150);
-		window.setTimeout(snake._bg_red, 300);
-		window.setTimeout(snake._bg_white, 450);
-		window.setTimeout(snake._bg_red, 600);
-		window.setTimeout(snake._bg_white, 750);
+		window.setTimeout(snake._bg_white, 200);
 	},
 
 	has_collision: function () {
@@ -119,6 +115,9 @@ var snake = {
 	},
 
 	add_segment: function () {
+		++snake.state.count
+		scoreDom = document.getElementById("score-count");
+		scoreDom.innerHTML = "Score: " + snake.state.count;
 		var newseg = snake.state.segments[snake.state.segments.length - 1].slice(0);
 		newseg[0] = (newseg[0] + snake.state.direction[0] * snake.size) % window.innerWidth;
 		if (newseg[0] < 0) {
@@ -146,7 +145,8 @@ var snake = {
 			target: snake.random_position(),
 			segments: [[0, Math.min(310, (window.innerHeight - (window.innerHeight % snake.size)) - 20)]],
 			speed: 5,
-			direction: [1, 0]
+			direction: [1, 0],
+			count: 0
 		};
 	},
 
@@ -165,24 +165,30 @@ var snake = {
 
 	clear_state: function () {
 		window.sessionStorage.removeItem('snake_state');
+		document.getElementById("Welcome_message").classList.remove("hide-message");
 		snake.state = snake.start_state();
 		snake.draw_state();
 	},
 
 	keydown: function (event) {
+		document.getElementById("Welcome_message").classList.add("hide-message");
+		document.getElementById("score-count").classList.remove("hide-message");
+		scoreDom = document.getElementById("score-count");
+		scoreDom.innerHTML = "Score: " + snake.state.count;
+
 		var keyCode = event.which || event.keyCode;
 		if (keyCode === 40) {
 			// down
-			snake.state.direction = [0, 1];
+			snake.state.direction = (snake.state.direction[1] != -1) ? [0, 1] : snake.state.direction;
 		} else if (keyCode === 38) {
 			// up
-			snake.state.direction = [0, -1];
+			snake.state.direction = (snake.state.direction[1] != 1) ? [0, -1] : snake.state.direction;
 		} else if (keyCode === 37) {
 			// left
-			snake.state.direction = [-1, 0];
+			snake.state.direction = (snake.state.direction[0] != 1) ? [-1, 0] : snake.state.direction;
 		} else if (keyCode === 39) {
 			// right
-			snake.state.direction = [1, 0];
+			snake.state.direction = (snake.state.direction[0] != -1) ? [1, 0] : snake.state.direction;
 		} else if (keyCode === 27) {
             // escape
             snake.clear_state(); // Reset the game

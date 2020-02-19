@@ -12,12 +12,15 @@
 				font-family: "Helvetica Neue", helvetica, arial, sans-serif;
 				text-align: center;
 			}
-			button {
-		    color: white;
-		    background: red;
-		    width: 50px;
-		    height: 50px;
-		    font-size: 18px;
+
+			.hide-message {
+				display: none;
+			}
+
+			#score-count {
+				position: fixed;
+				top: 0;
+				left: 5px;
 			}
 
 			/* GitHub Button */
@@ -47,14 +50,8 @@
 		</div>
 		<!-- Add Snakelet -->
 		<script src="snake.js"></script>
-<!--
-		<div>
-			<div style="text-align:center;width:480px;float: right;">
-		  <button onclick="moveup()">↑</button><br><br>
-		  <button onclick="moveleft()">←</button>
-		  <button onclick="moveright()">→</button><br><br>
-		  <button onclick="movedown()">↓</button>
+		<div id="score-count" class="hide-message">
+			<p>Score: </p>
 		</div>
-		</div> -->
 	</body>
 </html>
